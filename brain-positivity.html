@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Positivity 🧠✨</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, Arial, sans-serif;
+      min-height: 100vh;
+      background: #f7f4ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      color: #171321;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      font-size: 52px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 8px;
+      letter-spacing: -1.5px;
+    }
+
+    .subtitle {
+      color: #746d80;
+      font-size: 17px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 15px 50px rgba(40, 20, 70, 0.08);
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #625a70;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      resize: vertical;
+      border: 2px solid #eee9f5;
+      border-radius: 18px;
+      padding: 18px;
+      font-size: 18px;
+      line-height: 1.5;
+      font-family: inherit;
+      outline: none;
+      transition: .2s;
+    }
+
+    textarea:focus {
+      border-color: #8b5cf6;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 16px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #171321;
+      color: white;
+      transition: .2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    .result {
+      display: none;
+      margin-top: 24px;
+      padding: 24px;
+      border-radius: 20px;
+      background: #f3edff;
+    }
+
+    .result-label {
+      font-size: 13px;
+      font-weight: 800;
+      color: #7955c9;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    #positiveText {
+      font-size: 24px;
+      line-height: 1.45;
+      font-weight: 700;
+      white-space: pre-line;
+    }
+
+    .copy-btn {
+      background: white;
+      color: #171321;
+      border: 1px solid #ddd5ea;
+      margin-top: 18px;
+    }
+
+    .examples {
+      margin-top: 24px;
+      text-align: center;
+    }
+
+    .examples-title {
+      color: #746d80;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .example {
+      display: inline-block;
+      background: #fff;
+      border: 1px solid #eee9f5;
+      padding: 9px 14px;
+      border-radius: 100px;
+      margin: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .example:hover {
+      background: #f3edff;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 24px;
+      color: #938b9d;
+      font-size: 13px;
+    }
+
+    /* Popup */
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(23, 19, 33, .45);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 1000;
+      animation: fadeIn .25s ease;
+    }
+
+    .popup {
+      width: min(560px, 100%);
+      background: white;
+      border-radius: 30px;
+      padding: 34px;
+      text-align: center;
+      box-shadow: 0 25px 80px rgba(23, 19, 33, .25);
+      animation: popIn .35s cubic-bezier(.2,.8,.2,1);
+      position: relative;
+    }
+
+    .popup-sparkle {
+      font-size: 54px;
+      margin-bottom: 10px;
+      animation: bounce 1s ease infinite alternate;
+    }
+
+    .popup-eyebrow {
+      color: #7955c9;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .popup h2 {
+      font-size: 30px;
+      margin-bottom: 18px;
+      letter-spacing: -.8px;
+    }
+
+    .popup-thought {
+      background: #f3edff;
+      border-radius: 20px;
+      padding: 20px;
+      font-size: 21px;
+      line-height: 1.5;
+      font-weight: 700;
+      white-space: pre-line;
+      margin-bottom: 18px;
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      margin: 0;
+      border-radius: 50%;
+      background: #f5f2f8;
+      color: #5d5666;
+      font-size: 20px;
+    }
+
+    .popup-close:hover {
+      transform: none;
+      background: #ece7f2;
+    }
+
+    .popup-action {
+      margin-top: 0;
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(.85) translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes bounce {
+      from { transform: translateY(0) rotate(-4deg); }
+      to { transform: translateY(-7px) rotate(4deg); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Positive thought popup -->
+  <div class="popup-overlay" id="popupOverlay" onclick="closePopup(event)">
+    <div class="popup">
+      <button class="popup-close" onclick="closePopup()">×</button>
+
+      <div class="popup-sparkle">🧠✨</div>
+
+      <div class="popup-eyebrow">
+        Your brain's new version
+      </div>
+
+      <h2>Look at that differently. 💜</h2>
+
+      <div class="popup-thought" id="popupText"></div>
+
+      <button class="popup-action" onclick="closePopup()">
+        ✨ I choose this thought
+      </button>
+    </div>
+  </div>
+
+
+  <div class="container">
+
+    <div class="header">
+      <div class="logo">🧠✨</div>
+
+      <h1>Brain Positivity</h1>
+
+      <p class="subtitle">
+        Turn a negative thought into its positive opposite.
+      </p>
+    </div>
+
+
+    <div class="card">
+
+      <label for="negativeText">
+        WHAT ARE YOU THINKING?
+      </label>
+
+      <textarea
+        id="negativeText"
+        placeholder="I'm a loser..."
+      ></textarea>
+
+      <button onclick="reverseThought()">
+        ✨ Reverse My Thought
+      </button>
+
+
+      <div class="result" id="result">
+
+        <div class="result-label">
+          Your positive thought
+        </div>
+
+        <div id="positiveText"></div>
+
+        <button
+          class="copy-btn"
+          onclick="copyResult()"
+        >
+          📋 Copy
+        </button>
+
+      </div>
+
+
+      <div class="examples">
+
+        <div class="examples-title">
+          Try an example
+        </div>
+
+        <span
+          class="example"
+          onclick="useExample('I am a loser.')"
+        >
+          I am a loser.
+        </span>
+
+        <span
+          class="example"
+          onclick="useExample('I am not good enough.')"
+        >
+          I am not good enough.
+        </span>
+
+        <span
+          class="example"
+          onclick="useExample(&quot;I can't do this.&quot;)"
+        >
+          I can't do this.
+        </span>
+
+        <span
+          class="example"
+          onclick="useExample('I will never succeed.')"
+        >
+          I will never succeed.
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="footer">
+      Change the thought. Change the direction. 🧠
+    </div>
+
+  </div>
+
+
+  <script>
+
+    /*
+      IMPORTANT:
+      Phrase-level transformations happen FIRST.
+      This prevents the app from producing awkward
+      results such as:
+
+      "love just isn't meant for me"
+      ->
+      "love just is meant for me"
+
+      Instead, complete negative ideas are reversed.
+    */
+
+    const phraseReplacements = [
+
+      // Love / relationships
+      {
+        pattern: /maybe love just isn't meant for me/gi,
+        replacement: "love is meant for me"
+      },
+      {
+        pattern: /love isn't meant for me/gi,
+        replacement: "love is meant for me"
+      },
+      {
+        pattern: /love is not meant for me/gi,
+        replacement: "love is meant for me"
+      },
+      {
+        pattern: /i'll always end up alone/gi,
+        replacement: "i'll find a loving connection"
+      },
+      {
+        pattern: /i will always end up alone/gi,
+        replacement: "i will find a loving connection"
+      },
+      {
+        pattern: /i'm scared that i'll always end up alone/gi,
+        replacement: "i'm confident that i'll find a loving connection"
+      },
+      {
+        pattern: /i am scared that i'll always end up alone/gi,
+        replacement: "i am confident that i'll find a loving connection"
+      },
+      {
+        pattern: /i'm afraid i'll always be alone/gi,
+        replacement: "i'm confident that i'll find meaningful love"
+      },
+      {
+        pattern: /i am afraid i'll always be alone/gi,
+        replacement: "i am confident that i'll find meaningful love"
+      },
+      {
+        pattern: /i'll never find love/gi,
+        replacement: "i can find meaningful love"
+      },
+      {
+        pattern: /i will never find love/gi,
+        replacement: "i can find meaningful love"
+      },
+      {
+        pattern: /i'll never be loved/gi,
+        replacement: "i am worthy of being loved"
+      },
+      {
+        pattern: /i will never be loved/gi,
+        replacement: "i am worthy of being loved"
+      },
+      {
+        pattern: /i'm not meant to be loved/gi,
+        replacement: "i am worthy of being loved"
+      },
+      {
+        pattern: /i am not meant to be loved/gi,
+        replacement: "i am worthy of being loved"
+      },
+
+      // Self-worth
+      {
+        pattern: /i'm not good enough/gi,
+        replacement: "i am good enough"
+      },
+      {
+        pattern: /i am not good enough/gi,
+        replacement: "i am good enough"
+      },
+      {
+        pattern: /i can only watch people create\.\s*i cannot create anything myself/gi,
+        replacement: "i can create too, not just watch others create. i am capable of creating things myself"
+      },
+      {
+        pattern: /i can only watch people create\.\s*i can't create anything myself/gi,
+        replacement: "i can create too, not just watch others create. i am capable of creating things myself"
+      },
+
+      {
+        pattern: /i'm a loser/gi,
+        replacement: "i am a winner"
+      },
+      {
+        pattern: /i am a loser/gi,
+        replacement: "i am a winner"
+      },
+      {
+        pattern: /i'm a failure/gi,
+        replacement: "i am capable of success"
+      },
+      {
+        pattern: /i am a failure/gi,
+        replacement: "i am capable of success"
+      },
+      {
+        pattern: /i'm useless/gi,
+        replacement: "i am useful and capable"
+      },
+      {
+        pattern: /i am useless/gi,
+        replacement: "i am useful and capable"
+      },
+
+      // Capability
+      {
+        pattern: /i can't do this/gi,
+        replacement: "i can do this"
+      },
+      {
+        pattern: /i cannot do this/gi,
+        replacement: "i can do this"
+      },
+      {
+        pattern: /i'll never succeed/gi,
+        replacement: "i can succeed"
+      },
+      {
+        pattern: /i will never succeed/gi,
+        replacement: "i can succeed"
+      },
+      {
+        pattern: /i can't succeed/gi,
+        replacement: "i can succeed"
+      },
+      {
+        pattern: /i cannot succeed/gi,
+        replacement: "i can succeed"
+      },
+      {
+        pattern: /i'll never achieve my goals/gi,
+        replacement: "i can achieve my goals"
+      },
+      {
+        pattern: /i will never achieve my goals/gi,
+        replacement: "i can achieve my goals"
+      },
+
+      // Creation / comparison thoughts
+      {
+        pattern: /i can only watch people create/gi,
+        replacement: "i can create too, not just watch others create"
+      },
+      {
+        pattern: /i can only watch others create/gi,
+        replacement: "i can create too, not just watch others create"
+      },
+      {
+        pattern: /i cannot create anything myself/gi,
+        replacement: "i can create things myself"
+      },
+      {
+        pattern: /i can't create anything myself/gi,
+        replacement: "i can create things myself"
+      },
+      {
+        pattern: /i cannot create/gi,
+        replacement: "i can create"
+      },
+      {
+        pattern: /i can't create/gi,
+        replacement: "i can create"
+      },
+
+      // General negative beliefs
+      {
+        pattern: /nothing ever works out for me/gi,
+        replacement: "things can work out for me"
+      },
+      {
+        pattern: /nothing will ever change/gi,
+        replacement: "things can change for me"
+      },
+      {
+        pattern: /nobody believes in me/gi,
+        replacement: "people believe in me"
+      },
+      {
+        pattern: /no one believes in me/gi,
+        replacement: "people believe in me"
+      },
+      {
+        pattern: /i'm always behind/gi,
+        replacement: "i am making progress"
+      },
+      {
+        pattern: /i am always behind/gi,
+        replacement: "i am making progress"
+      },
+      {
+        pattern: /i'm stuck/gi,
+        replacement: "i am moving forward"
+      },
+      {
+        pattern: /i am stuck/gi,
+        replacement: "i am moving forward"
+      }
+    ];
+
+
+    /*
+      Word-level transformations are used AFTER
+      phrase-level transformations.
+    */
+
+    const wordReplacements = {
+
+      "can't": "can",
+      "cannot": "can",
+      "won't": "will",
+      "don't": "do",
+      "doesn't": "does",
+      "didn't": "did",
+      "isn't": "is",
+      "aren't": "are",
+      "wasn't": "was",
+      "weren't": "were",
+      "haven't": "have",
+      "hasn't": "has",
+      "couldn't": "could",
+      "wouldn't": "would",
+      "shouldn't": "should",
+
+      "never": "always",
+      "nothing": "everything",
+      "nobody": "everybody",
+      "nowhere": "everywhere",
+
+      "loser": "winner",
+      "failure": "success",
+      "fail": "succeed",
+      "failed": "succeeded",
+
+      "bad": "good",
+      "worst": "best",
+      "weak": "strong",
+      "ugly": "beautiful",
+      "stupid": "smart",
+      "useless": "useful",
+      "worthless": "valuable",
+      "poor": "wealthy",
+      "broke": "financially secure",
+
+      "sad": "happy",
+      "unhappy": "happy",
+      "unlucky": "lucky",
+      "afraid": "brave",
+      "scared": "confident",
+      "alone": "connected",
+      "hopeless": "hopeful",
+      "impossible": "possible",
+      "difficult": "possible",
+      "wrong": "right",
+      "hate": "love",
+      "angry": "peaceful",
+      "tired": "energized",
+      "stuck": "moving forward",
+      "behind": "progressing",
+      "broken": "healing",
+      "insecure": "confident",
+      "incompetent": "capable",
+      "incapable": "capable",
+      "unworthy": "worthy",
+      "unlovable": "lovable",
+      "unimportant": "important",
+      "irrelevant": "important",
+      "terrible": "amazing",
+      "awful": "wonderful",
+      "horrible": "wonderful",
+      "mistake": "lesson",
+      "problem": "opportunity"
+    };
+
+
+    function preserveCase(original, replacement) {
+
+      if (!replacement) return replacement;
+
+      if (
+        original[0] &&
+        original[0] === original[0].toUpperCase()
+      ) {
+        return replacement.charAt(0).toUpperCase()
+          + replacement.slice(1);
+      }
+
+      return replacement;
+    }
+
+
+    function reverseThought() {
+
+      const input =
+        document.getElementById("negativeText")
+          .value
+          .trim();
+
+      if (!input) {
+        alert("Write a thought first 🧠");
+        return;
+      }
+
+      /*
+        Normalize smart punctuation first.
+        Text copied from phones/browsers often uses
+        curly apostrophes like “I’m” and “isn’t”.
+        Our phrase rules use normal apostrophes.
+      */
+      let output = input
+        .replace(/[’‘]/g, "'")
+        .replace(/[“”]/g, '"');
+
+
+      /*
+        STEP 1
+        Reverse complete phrases FIRST.
+
+        This is the important part:
+        we want to reverse the meaning of the idea,
+        not randomly replace individual words.
+      */
+
+      phraseReplacements.forEach(rule => {
+        output = output.replace(
+          rule.pattern,
+          rule.replacement
+        );
+      });
+
+
+      /*
+        STEP 2
+        Reverse individual negative words.
+      */
+
+      const keys = Object.keys(wordReplacements)
+        .sort((a, b) => b.length - a.length);
+
+
+      keys.forEach(word => {
+
+        const replacement =
+          wordReplacements[word];
+
+        const regex = new RegExp(
+          "\\b" +
+          word.replace(
+            /[.*+?^${}()|[\]\\]/g,
+            "\\$&"
+          ) +
+          "\\b",
+          "gi"
+        );
+
+        output = output.replace(
+          regex,
+          match =>
+            preserveCase(
+              match,
+              replacement
+            )
+        );
+      });
+
+
+      /*
+        STEP 3
+        Clean spacing.
+      */
+
+      output = output
+        .replace(/[ \t]+/g, " ")
+        .replace(/\n /g, "\n")
+        .replace(/ +([,.!?])/g, "$1")
+        .trim();
+
+
+      /*
+        STEP 4
+        Handle standalone "not".
+        Only do this after phrase replacements.
+      */
+
+      output = output.replace(
+        /\bI am not\b/gi,
+        match =>
+          match[0] === "I"
+            ? "I am"
+            : "i am"
+      );
+
+      output = output.replace(
+        /\bI'm not\b/gi,
+        "I'm"
+      );
+
+
+      /*
+        If nothing meaningful changed,
+        provide a simple positive alternative.
+      */
+
+      /*
+        Semantic fallback for a common pattern:
+        "I can only X. I cannot Y."
+        Convert the limitation into agency.
+      */
+      const normalizedInput = input
+        .replace(/[’‘]/g, "'")
+        .replace(/[“”]/g, '"')
+        .trim();
+
+      if (
+        /i\s+can\s+only\s+.+\.\s*i\s+(?:cannot|can't)\s+.+/i.test(normalizedInput) &&
+        output.toLowerCase() === input.toLowerCase()
+      ) {
+        output =
+          "I can create and participate, not just watch. I am capable of doing it myself.";
+      }
+
+      if (
+        output.toLowerCase() ===
+        input.toLowerCase()
+      ) {
+        output =
+          "I choose to believe that something positive is possible for me.";
+      }
+
+
+      /*
+        Show the result on the page.
+      */
+
+      document.getElementById("positiveText")
+        .textContent = output;
+
+      document.getElementById("result")
+        .style.display = "block";
+
+
+      /*
+        Show the attention-grabbing popup.
+      */
+
+      document.getElementById("popupText")
+        .textContent = output;
+
+      document.getElementById("popupOverlay")
+        .style.display = "flex";
+
+
+      if (navigator.vibrate) {
+        navigator.vibrate([40, 30, 60]);
+      }
+    }
+
+
+    function useExample(text) {
+
+      document.getElementById("negativeText")
+        .value = text;
+
+      reverseThought();
+    }
+
+
+    function closePopup(event) {
+
+      const overlay =
+        document.getElementById("popupOverlay");
+
+      if (
+        !event ||
+        event.target === overlay
+      ) {
+        overlay.style.display = "none";
+      }
+    }
+
+
+    document.addEventListener(
+      "keydown",
+      event => {
+
+        if (event.key === "Escape") {
+          closePopup();
+        }
+
+        /*
+          Ctrl/Cmd + Enter = Reverse
+        */
+
+        if (
+          (event.ctrlKey || event.metaKey) &&
+          event.key === "Enter"
+        ) {
+          reverseThought();
+        }
+      }
+    );
+
+
+    async function copyResult() {
+
+      const text =
+        document.getElementById("positiveText")
+          .textContent;
+
+      try {
+
+        await navigator.clipboard.writeText(text);
+
+        const button =
+          document.querySelector(".copy-btn");
+
+        button.textContent = "✓ Copied!";
+
+        setTimeout(() => {
+          button.textContent = "📋 Copy";
+        }, 1500);
+
+      } catch {
+
+        alert(
+          "Copy failed. Please copy it manually."
+        );
+      }
+    }
+
+  </script>
+
+</body>
+</html>
